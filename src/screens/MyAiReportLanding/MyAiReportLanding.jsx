@@ -26,9 +26,44 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { fontGrid } from "@mui/material/styles/cssUtils";
 import React from "react";
-import { handlePayPalButtonClick } from "./paypalFunctionality";
+import PaypalButton from "./paypalFunctionality.jsx";
 
 export const MyAiReportLanding = () => {
+  const [contactInfo, setContactInfo] = React.useState({});
+  const paypalContainerRef = React.useRef(null);
+  const paypalContainer = document.getElementById("paypal-button-container");
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const handleSendMail = async () => {
+    console.log(contactInfo);
+    const response = await fetch("http://localhost:3000/sendEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contactInfo),
+    });
+    if (response.ok) {
+      alert("Email sent successfully");
+    } else {
+      alert("Failed to send email");
+    }
+  }
+
+  const Modal = ({ isOpen, onClose, children }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <button className="close-button" onClick={onClose}>
+            &times;
+          </button>
+          {children}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Box sx={{ backgroundColor: "white" }}>
       <Box sx={{ backgroundColor: "white", width: "100%" }}>
@@ -612,24 +647,24 @@ export const MyAiReportLanding = () => {
       </Container>
 
       <Container maxWidth="lg" sx={{ py: 10 }}>
-      <Typography
-  variant="h4"
-  align="center"
-  gutterBottom
-  sx={{
-    alignSelf: "stretch",
-    color: "#101828",
-    textAlign: "center",
-    fontFamily: "Fold Grotesque Pro",
-    fontSize: "var(--Font-size-display-lg, 48px)",
-    fontStyle: "normal",
-    fontWeight: 850,
-    lineHeight: "var(--Line-height-display-lg, 60px)", // 125%
-    letterSpacing: "-0.96px",
-  }}
->
-  Pricing Plans
-</Typography>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{
+            alignSelf: "stretch",
+            color: "#101828",
+            textAlign: "center",
+            fontFamily: "Fold Grotesque Pro",
+            fontSize: "var(--Font-size-display-lg, 48px)",
+            fontStyle: "normal",
+            fontWeight: 850,
+            lineHeight: "var(--Line-height-display-lg, 60px)", // 125%
+            letterSpacing: "-0.96px",
+          }}
+        >
+          Pricing Plans
+        </Typography>
 
         <Typography
           variant="h6"
@@ -640,226 +675,173 @@ export const MyAiReportLanding = () => {
           Simple, transparent pricing.
         </Typography>
         <Grid container spacing={4.5} sx={{ mt: 4 }}>
-                          <Grid item xs={12} md={4}>
-                            <Card sx={{ p: 3.75, textAlign: "center", mt: 7,
-      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.96)", // Soft shadow
-      borderRadius: "var(--radius-md, 8px)", // Consistent border radius
-    }}
-  >
-                            <Typography
-                  variant="h4"
-                  gutterBottom
-                  sx={{
-                    color: "#101828", // Ensures consistent text color
-                    textAlign: "center", // Centers the text
-                    fontFamily: "Fold Grotesque Pro", // Applies the desired font
-                    fontSize: "var(--Font-size-display-lg, 48px)", // Sets the font size
-                    fontStyle: "normal", // Resets any inherited styles
-                    fontWeight: 850, // Makes the text bold
-                    lineHeight: "var(--Line-height-display-lg, 60px)", // Sets line height to 125%
-                    letterSpacing: "-0.96px", // Adjusts spacing between letters
-                    whiteSpace: "nowrap", // Prevents wrapping of text
-                  }}
-                >
-                  $20/month
-                </Typography>
-
-                              <Typography variant="h6" gutterBottom>
-                                Basic plan
-                              </Typography>
-                              <Typography variant="body1" color="textSecondary" gutterBottom>
-                                Get few reports every month. Ideal for occasional users
-                              </Typography>
-                              <List>
-                                <ListItem>
-                                  <ListItemIcon>
-                                    <CheckCircleOutlineIcon color="primary" />
-                                  </ListItemIcon>
-                                  <ListItemText primary="3 reports per month" />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon>
-                                    <CheckCircleOutlineIcon color="primary" />
-                                  </ListItemIcon>
-                                  <ListItemText primary="Perfect for occasional needs." />
-                                </ListItem>
-                                <ListItem>
-                                  <ListItemIcon>
-                                    <CheckCircleOutlineIcon color="primary" />
-                                  </ListItemIcon>
-                                  <ListItemText primary="Less than $7/ report. Recurrent Billing" />
-                                </ListItem>
-                              </List>
-                              <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    display: "flex",
-                    padding: "var(--spacing-lg, 12px) 102px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "var(--spacing-sm, 6px)",
-                    alignSelf: "stretch",
-                    borderRadius: "var(--radius-md, 8px)",
-                    border: "2px solid rgba(255, 255, 255, 0.12)",
-                    backgroundColor: "#168118", // Ensure consistent primary color
-                    boxShadow:
-                      "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-                    color: "#FFF",
-                    fontFamily: '"Fold Grotesque Pro"',
-                    fontSize: "var(--Font-size-text-md, 16px)",
-                    fontStyle: "normal",
-                    fontWeight: 850,
-                    lineHeight: "var(--Line-height-text-md, 24px)", // 150%
-                    textTransform: "none", // Prevent uppercase text transformation
-                    "&:hover": {
-                      backgroundColor: "#136A15", // Darken the background on hover
-                    },
-                  }}
-                >
-                  Get Started
-                </Button>
-                            </Card>
-                          </Grid>
-          
           <Grid item xs={12} md={4}>
-            
-          <Box
-    sx={{
-      position: "relative",
-      textAlign: "center",
-      mb: 0, // Margin bottom for spacing
-    }}
-  >
-    <Box
-      sx={{
-        display: "inline-block",
-        backgroundColor: "#2A952C",
-        color: "#FFF",
-        padding: "17px 112px",
-        borderRadius: "5px",
-        fontFamily: "Fold Grotesque Pro",
-        fontSize: "17px",
-        fontWeight: 850,
-        textAlign: "center",
-        whiteSpace: "nowrap",
-      }}
-    >
-      Most Popular Plan
-    </Box>
-  </Box>
+            <Card sx={{
+              p: 3.75, textAlign: "center", mt: 7,
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.96)", // Soft shadow
+              borderRadius: "var(--radius-md, 8px)", // Consistent border radius
+            }}
+            >
+              <Typography
+                variant="h4"
+                gutterBottom
+                sx={{
+                  color: "#101828", // Ensures consistent text color
+                  textAlign: "center", // Centers the text
+                  fontFamily: "Fold Grotesque Pro", // Applies the desired font
+                  fontSize: "var(--Font-size-display-lg, 48px)", // Sets the font size
+                  fontStyle: "normal", // Resets any inherited styles
+                  fontWeight: 850, // Makes the text bold
+                  lineHeight: "var(--Line-height-display-lg, 60px)", // Sets line height to 125%
+                  letterSpacing: "-0.96px", // Adjusts spacing between letters
+                  whiteSpace: "nowrap", // Prevents wrapping of text
+                }}
+              >
+                $20/month
+              </Typography>
 
-  {/* Card for $30 Plan */}
-  <Card
-    sx={{
-      p: 4,
-      textAlign: "center",
-      borderColor: "#2a952c",
-      borderWidth: 2,
-      // borderStyle: "dotted",
-      boxShadow: "0px 4px 12px rgb(46, 114, 19)", // Soft shadow
-      borderRadius: "var(--radius-md, 8px)", // Consistent border radius
-    }}
-  >
-    <Typography
-  variant="h4"
-  gutterBottom
-  sx={{
-    color: "#101828", // Ensures consistent text color
-    textAlign: "center", // Centers the text
-    fontFamily: "Fold Grotesque Pro", // Applies the desired font
-    fontSize: "var(--Font-size-display-lg, 48px)", // Sets the font size
-    fontStyle: "normal", // Resets any inherited styles
-    fontWeight: 850, // Makes the text bold
-    lineHeight: "var(--Line-height-display-lg, 60px)", // Sets line height to 125%
-    letterSpacing: "-0.96px", // Adjusts spacing between letters
-    whiteSpace: "nowrap", // Prevents wrapping of text
-  }}
->
-  $30/month
-</Typography>
+              <Typography variant="h6" gutterBottom>
+                Basic plan
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                Get few reports every month. Ideal for occasional users
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <CheckCircleOutlineIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="3 reports per month" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <CheckCircleOutlineIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Perfect for occasional needs." />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <CheckCircleOutlineIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Less than $7/ report. Recurrent Billing" />
+                </ListItem>
+              </List>
+              <PaypalButton price={20} />
+            </Card>
+          </Grid>
 
-    <Typography variant="h6" gutterBottom>
-      Standard Plan
-    </Typography>
-    <Typography variant="body1" color="textSecondary" gutterBottom>
-      Get more reports per month. Ideal for those with a larger portfolio.
-    </Typography>
-    <List>
-      <ListItem>
-        <ListItemIcon>
-          <CheckCircleOutlineIcon color="primary" />
-        </ListItemIcon>
-        <ListItemText primary="5 reports per month." />
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          <CheckCircleOutlineIcon color="primary" />
-        </ListItemIcon>
-        <ListItemText primary="Ideal for a large portfolio" />
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          <CheckCircleOutlineIcon color="primary" />
-        </ListItemIcon>
-        <ListItemText primary="$6/ Report (Cheapest). Recurrent Billing" />
-      </ListItem>
-    </List>
-    <Button
-  variant="contained"
-  color="primary"
-  sx={{
-    display: "flex",
-    padding: "var(--spacing-lg, 12px) 102px",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "var(--spacing-sm, 6px)",
-    alignSelf: "stretch",
-    borderRadius: "var(--radius-md, 8px)",
-    border: "2px solid rgba(255, 255, 255, 0.12)",
-    backgroundColor: "#168118", // Ensure consistent primary color
-    boxShadow:
-      "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-    color: "#FFF",
-    fontFamily: '"Fold Grotesque Pro"',
-    fontSize: "var(--Font-size-text-md, 16px)",
-    fontStyle: "normal",
-    fontWeight: 850,
-    lineHeight: "var(--Line-height-text-md, 24px)", // 150%
-    textTransform: "none", // Prevent uppercase text transformation
-    "&:hover": {
-      backgroundColor: "#136A15", // Darken the background on hover
-    },
-  }}
->
-  Get Started
-</Button>
-
-  </Card>
-</Grid>
           <Grid item xs={12} md={4}>
-          <Card sx={{ p: 3.75, textAlign: "center", mt: 6.9,
-      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.96)", // Soft shadow
-      borderRadius: "var(--radius-md, 8px)", // Consistent border radius
-    }}
-  >
-          <Typography
-  variant="h4"
-  gutterBottom
-  sx={{
-    color: "#101828", // Ensures consistent text color
-    textAlign: "center", // Centers the text
-    fontFamily: "Fold Grotesque Pro", // Applies the desired font
-    fontSize: "var(--Font-size-display-lg, 48px)", // Sets the font size
-    fontStyle: "normal", // Resets any inherited styles
-    fontWeight: 850, // Makes the text bold
-    lineHeight: "var(--Line-height-display-lg, 60px)", // Sets line height to 125%
-    letterSpacing: "-0.96px", // Adjusts spacing between letters
-    whiteSpace: "nowrap", // Prevents wrapping of text
-  }}
->
-  $10/month
-</Typography>
+
+            <Box
+              sx={{
+                position: "relative",
+                textAlign: "center",
+                mb: 0, // Margin bottom for spacing
+              }}
+            >
+              <Box
+                sx={{
+                  display: "inline-block",
+                  backgroundColor: "#2A952C",
+                  color: "#FFF",
+                  padding: "17px 112px",
+                  borderRadius: "5px",
+                  fontFamily: "Fold Grotesque Pro",
+                  fontSize: "17px",
+                  fontWeight: 850,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Most Popular Plan
+              </Box>
+            </Box>
+
+            {/* Card for $30 Plan */}
+            <Card
+              sx={{
+                p: 4,
+                textAlign: "center",
+                borderColor: "#2a952c",
+                borderWidth: 2,
+                // borderStyle: "dotted",
+                boxShadow: "0px 4px 12px rgb(46, 114, 19)", // Soft shadow
+                borderRadius: "var(--radius-md, 8px)", // Consistent border radius
+              }}
+            >
+              <Typography
+                variant="h4"
+                gutterBottom
+                sx={{
+                  color: "#101828", // Ensures consistent text color
+                  textAlign: "center", // Centers the text
+                  fontFamily: "Fold Grotesque Pro", // Applies the desired font
+                  fontSize: "var(--Font-size-display-lg, 48px)", // Sets the font size
+                  fontStyle: "normal", // Resets any inherited styles
+                  fontWeight: 850, // Makes the text bold
+                  lineHeight: "var(--Line-height-display-lg, 60px)", // Sets line height to 125%
+                  letterSpacing: "-0.96px", // Adjusts spacing between letters
+                  whiteSpace: "nowrap", // Prevents wrapping of text
+                }}
+              >
+                $30/month
+              </Typography>
+
+              <Typography variant="h6" gutterBottom>
+                Standard Plan
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                Get more reports per month. Ideal for those with a larger portfolio.
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <CheckCircleOutlineIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="5 reports per month." />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <CheckCircleOutlineIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Ideal for a large portfolio" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <CheckCircleOutlineIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="$6/ Report (Cheapest). Recurrent Billing" />
+                </ListItem>
+              </List>
+              <PaypalButton price={30}/>
+
+
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Card sx={{
+              p: 3.75, textAlign: "center", mt: 6.9,
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.96)", // Soft shadow
+              borderRadius: "var(--radius-md, 8px)", // Consistent border radius
+            }}
+            >
+              <Typography
+                variant="h4"
+                gutterBottom
+                sx={{
+                  color: "#101828", // Ensures consistent text color
+                  textAlign: "center", // Centers the text
+                  fontFamily: "Fold Grotesque Pro", // Applies the desired font
+                  fontSize: "var(--Font-size-display-lg, 48px)", // Sets the font size
+                  fontStyle: "normal", // Resets any inherited styles
+                  fontWeight: 850, // Makes the text bold
+                  lineHeight: "var(--Line-height-display-lg, 60px)", // Sets line height to 125%
+                  letterSpacing: "-0.96px", // Adjusts spacing between letters
+                  whiteSpace: "nowrap", // Prevents wrapping of text
+                }}
+              >
+                $10/month
+              </Typography>
 
               <Typography variant="h6" gutterBottom>
                 Pay As You Go
@@ -893,36 +875,9 @@ export const MyAiReportLanding = () => {
                   <ListItemText primary="No Monthly subscription" />
                 </ListItem>
               </List>
-              <Button
-  variant="contained"
-  color="primary"
-  sx={{
-    display: "flex",
-    padding: "var(--spacing-lg, 12px) 102px",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "var(--spacing-sm, 6px)",
-    alignSelf: "stretch",
-    borderRadius: "var(--radius-md, 8px)",
-    border: "2px solid rgba(255, 255, 255, 0.12)",
-    backgroundColor: "#168118", // Ensure consistent primary color
-    boxShadow:
-      "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-    color: "#FFF",
-    fontFamily: '"Fold Grotesque Pro"',
-    fontSize: "var(--Font-size-text-md, 16px)",
-    fontStyle: "normal",
-    fontWeight: 850,
-    lineHeight: "var(--Line-height-text-md, 24px)", // 150%
-    textTransform: "none", // Prevent uppercase text transformation
-    "&:hover": {
-      backgroundColor: "#136A15", // Darken the background on hover
-    },
-  }}
->
-  Get Started
-</Button>
-{/* const MyComponent = () => {
+              <PaypalButton price={10}/>
+              
+              {/* const MyComponent = () => {
   return (
     <div>
       <div id="paypal-button-container"></div>
@@ -965,141 +920,102 @@ export default MyComponent; */}
           Frequently Asked Questions
         </Typography>
         <div>
-      <Accordion
-        sx={{
-          boxShadow: "none", // Removes shadow
-          border: "none", // Removes border
-          "&:before": { display: "none" }, // Removes the divider line
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          <Typography component="span">What is included in the report?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          Our report includes fundamental and technical analysis, earnings summaries, market recommendations, and key insights for making informed stock decisions.
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        sx={{
-          boxShadow: "none",
-          border: "none",
-          "&:before": { display: "none" },
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          <Typography component="span">How does the report save time?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        defaultExpanded
-        sx={{
-          boxShadow: "none",
-          border: "none",
-          "&:before": { display: "none" },
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3-content"
-          id="panel3-header"
-        >
-          <Typography component="span">How can this report help me save money?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        sx={{
-          boxShadow: "none",
-          border: "none",
-          "&:before": { display: "none" },
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel4-content"
-          id="panel4-header"
-        >
-          <Typography component="span">Is the information unbiased?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        sx={{
-          boxShadow: "none",
-          border: "none",
-          "&:before": { display: "none" },
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel5-content"
-          id="panel5-header"
-        >
-          <Typography component="span">How AI is used in creating a report?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </AccordionDetails>
-      </Accordion>
-    </div>
-        {/* <List>
-          <ListItem>
-            <ListItemText
-              primary="What is included in the report?"
-              secondary="Our report includes fundamental and technical analysis, earnings summaries, market recommendations, and key insights for making informed stock decisions."
-            />
-            <ListItemIcon>
-              <RemoveCircleOutline color="primary" />
-            </ListItemIcon>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="How does the report save time?" />
-            <ListItemIcon>
-              <AddCircleOutline color="primary" />
-            </ListItemIcon>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="How can this report help me save money?" />
-            <ListItemIcon>
-              <AddCircleOutline color="primary" />
-            </ListItemIcon>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="Is the information unbiased?" />
-            <ListItemIcon>
-              <AddCircleOutline color="primary" />
-            </ListItemIcon>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="How AI is used in creating a report?" />
-            <ListItemIcon>
-              <AddCircleOutline color="primary" />
-            </ListItemIcon>
-          </ListItem>
-        </List> */}
+          <Accordion
+            sx={{
+              boxShadow: "none", // Removes shadow
+              border: "none", // Removes border
+              "&:before": { display: "none" }, // Removes the divider line
+            }}
+            defaultExpanded
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span">What is included in the report?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              Our report includes fundamental and technical analysis, earnings summaries, market recommendations, and key insights for making informed stock decisions.
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            sx={{
+              boxShadow: "none",
+              border: "none",
+              "&:before": { display: "none" },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              <Typography component="span">How does the report save time?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              malesuada lacus ex, sit amet blandit leo lobortis eget.
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            sx={{
+              boxShadow: "none",
+              border: "none",
+              "&:before": { display: "none" },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel3-content"
+              id="panel3-header"
+            >
+              <Typography component="span">How can this report help me save money?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              malesuada lacus ex, sit amet blandit leo lobortis eget.
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            sx={{
+              boxShadow: "none",
+              border: "none",
+              "&:before": { display: "none" },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel4-content"
+              id="panel4-header"
+            >
+              <Typography component="span">Is the information unbiased?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              malesuada lacus ex, sit amet blandit leo lobortis eget.
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            sx={{
+              boxShadow: "none",
+              border: "none",
+              "&:before": { display: "none" },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel5-content"
+              id="panel5-header"
+            >
+              <Typography component="span">How AI is used in creating a report?</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              malesuada lacus ex, sit amet blandit leo lobortis eget.
+            </AccordionDetails>
+          </Accordion>
+        </div>
       </Container>
 
       <Container
@@ -1193,6 +1109,7 @@ export default MyComponent; */}
                 required
                 margin="normal"
                 variant="outlined"
+                onChange={(e) => setContactInfo({ ...contactInfo, name: e.target.value })}
               />
               <TextField
                 fullWidth
@@ -1200,12 +1117,14 @@ export default MyComponent; */}
                 required
                 margin="normal"
                 variant="outlined"
+                onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
               />
               <TextField
                 fullWidth
                 label="Phone number"
                 margin="normal"
                 variant="outlined"
+                onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
               />
               <TextField
                 fullWidth
@@ -1215,12 +1134,14 @@ export default MyComponent; */}
                 variant="outlined"
                 multiline
                 rows={4}
+                onChange={(e) => setContactInfo({ ...contactInfo, message: e.target.value })}
               />
               <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                 <Button
                   variant="contained"
                   color="primary"
                   sx={{ width: "100%" }}
+                  onClick={handleSendMail}
                 >
                   Send Message
                 </Button>
