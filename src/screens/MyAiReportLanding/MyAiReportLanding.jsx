@@ -26,6 +26,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { fontGrid } from "@mui/material/styles/cssUtils";
 import React from "react";
+import { handlePayPalButtonClick } from "./paypalFunctionality";
 
 export const MyAiReportLanding = () => {
   return (
@@ -735,7 +736,7 @@ export const MyAiReportLanding = () => {
         display: "inline-block",
         backgroundColor: "#2A952C",
         color: "#FFF",
-        padding: "15px 112px",
+        padding: "17px 112px",
         borderRadius: "5px",
         fontFamily: "Fold Grotesque Pro",
         fontSize: "17px",
@@ -755,7 +756,7 @@ export const MyAiReportLanding = () => {
       textAlign: "center",
       borderColor: "#2a952c",
       borderWidth: 2,
-      borderStyle: "solid",
+      // borderStyle: "dotted",
       boxShadow: "0px 4px 12px rgb(46, 114, 19)", // Soft shadow
       borderRadius: "var(--radius-md, 8px)", // Consistent border radius
     }}
@@ -892,35 +893,39 @@ export const MyAiReportLanding = () => {
                   <ListItemText primary="No Monthly subscription" />
                 </ListItem>
               </List>
-              <Button
-  variant="contained"
-  color="primary"
-  sx={{
-    display: "flex",
-    padding: "var(--spacing-lg, 12px) 102px",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "var(--spacing-sm, 6px)",
-    alignSelf: "stretch",
-    borderRadius: "var(--radius-md, 8px)",
-    border: "2px solid rgba(255, 255, 255, 0.12)",
-    backgroundColor: "#168118", // Ensure consistent primary color
-    boxShadow:
-      "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-    color: "#FFF",
-    fontFamily: '"Fold Grotesque Pro"',
-    fontSize: "var(--Font-size-text-md, 16px)",
-    fontStyle: "normal",
-    fontWeight: 850,
-    lineHeight: "var(--Line-height-text-md, 24px)", // 150%
-    textTransform: "none", // Prevent uppercase text transformation
-    "&:hover": {
-      backgroundColor: "#136A15", // Darken the background on hover
-    },
-  }}
->
-  Get Started
-</Button>
+              const MyComponent = () => {
+  return (
+    <div>
+      <div id="paypal-button-container"></div>
+      <button
+        style={{
+          display: "flex",
+          padding: "12px 102px",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "6px",
+          borderRadius: "8px",
+          border: "2px solid rgba(255, 255, 255, 0.12)",
+          backgroundColor: "#168118",
+          boxShadow:
+            "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+          color: "#FFF",
+          fontFamily: '"Fold Grotesque Pro"',
+          fontSize: "16px",
+          fontWeight: 850,
+          lineHeight: "24px",
+          textTransform: "none",
+        }}
+        onClick={handlePayPalButtonClick}
+      >
+        Get Started
+      </button>
+    </div>
+  );
+};
+
+export default MyComponent;
+
             </Card>
           </Grid>
         </Grid>
