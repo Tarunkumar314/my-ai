@@ -893,7 +893,36 @@ export const MyAiReportLanding = () => {
                   <ListItemText primary="No Monthly subscription" />
                 </ListItem>
               </List>
-              const MyComponent = () => {
+              <Button
+  variant="contained"
+  color="primary"
+  sx={{
+    display: "flex",
+    padding: "var(--spacing-lg, 12px) 102px",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "var(--spacing-sm, 6px)",
+    alignSelf: "stretch",
+    borderRadius: "var(--radius-md, 8px)",
+    border: "2px solid rgba(255, 255, 255, 0.12)",
+    backgroundColor: "#168118", // Ensure consistent primary color
+    boxShadow:
+      "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+    color: "#FFF",
+    fontFamily: '"Fold Grotesque Pro"',
+    fontSize: "var(--Font-size-text-md, 16px)",
+    fontStyle: "normal",
+    fontWeight: 850,
+    lineHeight: "var(--Line-height-text-md, 24px)", // 150%
+    textTransform: "none", // Prevent uppercase text transformation
+    "&:hover": {
+      backgroundColor: "#136A15", // Darken the background on hover
+    },
+  }}
+>
+  Get Started
+</Button>
+{/* const MyComponent = () => {
   return (
     <div>
       <div id="paypal-button-container"></div>
@@ -924,8 +953,7 @@ export const MyAiReportLanding = () => {
   );
 };
 
-export default MyComponent;
-
+export default MyComponent; */}
             </Card>
           </Grid>
         </Grid>
