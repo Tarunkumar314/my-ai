@@ -25,12 +25,14 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { fontGrid } from "@mui/material/styles/cssUtils";
-import React from "react";
+// import React from "react";
+import React, { useRef } from 'react';
 import PaypalButton from "./paypalFunctionality.jsx";
 
 export const MyAiReportLanding = () => {
   const [contactInfo, setContactInfo] = React.useState({});
   const paypalContainerRef = React.useRef(null);
+  const contactUsRef = useRef(null);
   const paypalContainer = document.getElementById("paypal-button-container");
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const handleSendMail = async () => {
@@ -63,6 +65,11 @@ export const MyAiReportLanding = () => {
       </div>
     );
   };
+  
+    const scrollToContactUs = () => {
+      contactUsRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
+  
 
   return (
     <Box sx={{ backgroundColor: "white" }}>
@@ -88,20 +95,23 @@ export const MyAiReportLanding = () => {
               />
             </a>
             <Box sx={{ display: "flex", gap: 4 }}>
-              <Button
-                variant="text"
-                color="inherit"
-                sx={{
-                  fontFamily: "Fold Grotesque Pro",
-                  fontSize: "var(--Font-size-text-md, 18px)",
-                  fontStyle: "normal",
-                  fontWeight: 850,
-                  lineHeight: "var(--Line-height-text-md, 24px)",
-                  color: "#101828",
-                }}
-              >
-                Sample Report 1
-              </Button>
+          <a href="../sample_report.pdf" download="sample_report.pdf">
+                <Button
+                  variant="text"
+                  color="inherit"
+                  sx={{
+                    fontFamily: "Fold Grotesque Pro",
+                    fontSize: "var(--Font-size-text-md, 18px)",
+                    fontStyle: "normal",
+                    fontWeight: 850,
+                    lineHeight: "var(--Line-height-text-md, 24px)",
+                    color: "#101828",
+                  }}
+                >
+                  Sample Report 1
+                </Button>
+              </a>
+              <a href="../sample_report.pdf" download="sample_report.pdf">
               <Button
                 variant="text"
                 color="inherit"
@@ -116,6 +126,7 @@ export const MyAiReportLanding = () => {
               >
                 Sample Report 2
               </Button>
+              </a>
               <Button
                 variant="text"
                 color="inherit"
@@ -127,6 +138,7 @@ export const MyAiReportLanding = () => {
                   lineHeight: "var(--Line-height-text-md, 24px)",
                   color: "#101828",
                 }}
+                onClick={scrollToContactUs}
               >
                 Contact Us
               </Button>
@@ -179,6 +191,8 @@ export const MyAiReportLanding = () => {
 
               <Box sx={{ display: "flex", gap: 2, mt: 4 }}>
                 <Button
+                href="../sample_report.pdf"
+                  download="sample_report.pdf"
                   variant="contained"
                   color="primary"
                   sx={{
@@ -1080,6 +1094,7 @@ export default MyComponent; */}
             fontWeight: 850,
             lineHeight: "var(--Line-height-text-lg, 28px)",
           }}
+          onClick={scrollToContactUs}
         >
           CONTACT US
         </Button>
@@ -1095,7 +1110,7 @@ export default MyComponent; */}
               sx={{ borderRadius: 4, height: 800 }}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid ref={contactUsRef} item xs={12} md={6}>
             <Typography variant="h4" gutterBottom>
               Contact Us
             </Typography>
@@ -1174,13 +1189,15 @@ export default MyComponent; */}
                 />
                 <Box>
                   <Button
+                  href="../sample_report.pdf"
+                  download="sample_report.pdf"
                     variant="text"
                     color="inherit"
                     sx={{
                       fontFamily: "Fold Grotesque Pro",
                       fontSize: "var(--Font-size-text-md, 16px)",
                       fontWeight: 850,
-                      lineHeight: "var(--Line-height-text-md, 24px)",
+                      lineHeight:"var(--Line-height-text-md, 24px)",
                       color: "white",
                     }}
                   >
