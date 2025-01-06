@@ -2,21 +2,44 @@ import React, { useState, useEffect, useRef } from "react";
 import "./modal.css";
 import { Button } from "@mui/material";
 
-const PaypalButton = ({price}) => {
+const PaypalButton = () => {
   const paypalContainerRef = useRef(null);
+  const [amt, setAmt] = useState('1.00');
+  const [noOfReports, setNoOfReports] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  let amount = 0;
-  if(price === 20){
-    amount = "20.00";
-  }else if(price === 30){
-    amount = "30.00";
-  }else if(price === 10){
-    amount = "10.00";
-  }else {
-    return null;
+  const [email, setEmail] = useState("");
+  const [tickerSymbols, setTickerSymbols] = useState("");
+  function isValidTickerSymbol(symbol) {
+    // Check if the symbol is a non-empty string and matches the pattern of 1-5 uppercase letters
+    const regex = /^[A-Z]{1,5}$/;
+    return regex.test(symbol);
   }
 
+  function calculateTotalCost(quantity) {
+    // Pricing tiers
+    const pricing = {
+      1: 25,
+      2: 40,
+      3: 45,
+      4: 60,
+      5: 50,
+      6: 60,
+      7: 70,
+      8: 80,
+      9: 90,
+      10: 100
+    };
 
+    // Check if the quantity is within the pricing tiers
+    if (quantity < 1 || quantity > 10) {
+      return "Invalid quantity. Please select between 1 and 10.";
+    }
+
+
+
+    // Return the corresponding cost
+    return pricing[quantity];
+  }
   useEffect(() => {
     // Dynamically load the PayPal script once
     const script = document.createElement("script");
@@ -34,6 +57,38 @@ const PaypalButton = ({price}) => {
   }, []);
 
   useEffect(() => {
+    console.log("Modal open state changed:", isModalOpen, amt);
+    if (!email) {
+      if (paypalContainerRef.current) {
+        console.log(paypalContainerRef)
+        paypalContainerRef.current.innerHTML = "Please enter your email address";
+        paypalContainerRef.current.style.color = "red";
+        return;
+      }
+    }
+    else if (noOfReports < 1 || noOfReports > 10) {
+      // alert("Invalid quantity. Please select between 1 and 10.");
+      if (paypalContainerRef.current) {
+        paypalContainerRef.current.innerHTML = "Invalid quantity. Please select between 1 and 10.";
+        paypalContainerRef.current.style.color = "red";
+        return;
+      }
+    } else {
+      const symbols = tickerSymbols.split(" ");
+      for (const symbol of symbols) {
+        if (!isValidTickerSymbol(symbol)) {
+          if (paypalContainerRef.current) {
+            paypalContainerRef.current.innerHTML = "Invalid ticker symbol(s). Please enter valid symbols separated by a space.";
+            paypalContainerRef.current.style.color = "red";
+            return;
+          }
+        }
+      }
+    }
+
+
+
+
     if (isModalOpen && window.paypal) {
       // Clear existing buttons if already rendered
       paypalContainerRef.current.innerHTML = "";
@@ -47,7 +102,7 @@ const PaypalButton = ({price}) => {
               purchase_units: [
                 {
                   amount: {
-                    value: amount, // Payment amount
+                    value: amt, // Payment amount
                   },
                 },
               ],
@@ -64,57 +119,63 @@ const PaypalButton = ({price}) => {
         })
         .render(paypalContainerRef.current); // Render buttons to the container
     }
-  }, [isModalOpen]); // Re-run when the modal opens
-
+  }, [isModalOpen, amt, email, tickerSymbols]); // Re-run when the modal opens
 
   return (
     <div>
       <Button
         variant="contained"
-        color="primary"
+        color="secondary"
         sx={{
+          height: 'max-content',
           display: "flex",
-          padding: "var(--spacing-lg, 12px) 102px",
+          padding: "var(--spacing-xl, 16px) 22px",
           justifyContent: "center",
           alignItems: "center",
-          gap: "var(--spacing-sm, 6px)",
-          alignSelf: "stretch",
-          borderRadius: "var(--radius-md, 8px)",
-          border: "2px solid rgba(255, 255, 255, 0.12)",
-          backgroundColor: "#168118", // Ensure consistent primary color
-          boxShadow:
-            "0px 0px 0px 1px rgba(16, 24, 40, 0.18) inset, 0px -2px 0px 0px rgba(16, 24, 40, 0.05) inset, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+          gap: "10px",
+          borderRadius: "var(--radius-lg, 10px)",
+          border: "1px solid #FFF",
+          background: "#168118",
           color: "#FFF",
-          fontFamily: '"Fold Grotesque Pro"',
-          fontSize: "var(--Font-size-text-md, 16px)",
+          boxShadow:
+            "0px 0px 0px 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(16, 24, 40, 0.18)) inset, 0px -2px 0px 0px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(16, 24, 40, 0.05)) inset, 0px 1px 2px 0px var(--Colors-Effects-Shadows-shadow-xs, rgba(16, 24, 40, 0.05))",
+          fontFamily: "'Fold Grotesque Pro', sans-serif",
+          fontSize: "var(--Font-size-text-lg, 18px)",
           fontStyle: "normal",
           fontWeight: 850,
-          lineHeight: "var(--Line-height-text-md, 24px)", // 150%
-          textTransform: "none", // Prevent uppercase text transformation
-          "&:hover": {
-            backgroundColor: "#136A15", // Darken the background on hover
-          },
+          lineHeight: "var(--Line-height-text-lg, 28px)",
         }}
         onClick={() => setIsModalOpen(true)}
       >
-        Get Started
+        Get AI Report
       </Button>
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2>GET AI REPORT(S)</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <p>Enter your email address where the report will be delivered:*</p>
-          <input type="text" placeholder="Email address" />
+          <input type="text" placeholder="Email address"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          />
           <p>How many reports do you want?* ("Example: 2 or 5")</p>
-          <input type="number" placeholder="Number of reports" />
+          <input value={noOfReports} type="number" placeholder="Number of reports" onChange={(e) => { setNoOfReports(e.target.value); setAmt(calculateTotalCost(e.target.value)) }} />
           <p>
             Enter the valid ticker symbols matching reports you want, separated
             by a space:*
           </p>
-          <input type="text" placeholder="e.g., AAPL TSLA MSFT" />
+          <input type="text" placeholder="e.g., AAPL TSLA MSFT" value={tickerSymbols} onChange={
+            (e) => {
+              setTickerSymbols(e.target.value);
+            }
+          } />
           <div
             id="paypal-button-container"
             ref={paypalContainerRef}
             style={{ marginTop: "20px" }}
+
           ></div>
         </div>
       </Modal>
