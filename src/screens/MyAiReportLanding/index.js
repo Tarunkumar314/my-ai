@@ -1,0 +1,1 @@
+export { MyAiReportLanding } from "./MyAiReportLanding";
