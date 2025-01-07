@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./modal.css";
 import { Button } from "@mui/material";
+import { handleSendMail } from "../../utils/sendMail";
 
 const PaypalButton = () => {
   const paypalContainerRef = useRef(null);
@@ -110,6 +111,7 @@ const PaypalButton = () => {
           },
           onApprove: (data, actions) => {
             return actions.order.capture().then((details) => {
+              handleSendMail({ email, tickerSymbols, mode: "Report Asked" })
               alert(`Transaction completed by ${details.payer.name.given_name}`);
             });
           },
@@ -129,7 +131,6 @@ const PaypalButton = () => {
         sx={{
           height: 'max-content',
           display: "flex",
-          padding: "var(--spacing-xl, 16px) 22px",
           justifyContent: "center",
           alignItems: "center",
           gap: "10px",
@@ -140,7 +141,6 @@ const PaypalButton = () => {
           boxShadow:
             "0px 0px 0px 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(16, 24, 40, 0.18)) inset, 0px -2px 0px 0px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(16, 24, 40, 0.05)) inset, 0px 1px 2px 0px var(--Colors-Effects-Shadows-shadow-xs, rgba(16, 24, 40, 0.05))",
           fontFamily: "'Fold Grotesque Pro', sans-serif",
-          fontSize: "var(--Font-size-text-lg, 18px)",
           fontStyle: "normal",
           fontWeight: 850,
           lineHeight: "var(--Line-height-text-lg, 28px)",

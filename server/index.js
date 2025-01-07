@@ -2,6 +2,8 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { validateEmail } from './utils/emailValidator.js';
+import { sendEmail } from './utils/sendMail.js';
 
 const app = express();
 
@@ -16,36 +18,26 @@ app.get('/', (req, res) => {
 
 app.post('/sendEmail', async (req, res) => {
     console.log(req.body);
-    const { name, email, phone, message } = req.body;
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        port: 465,
-        secure: true,
-        auth: {
-            user: 'prashantpal2468@gmail.com',
-            pass: 'hqqekgjfxdgxcohy'
+    const { name, email, phone, message, noOfReports, tickerSymbols, mode } = req.body;
+
+    // if (!name || !message || !email) { return res.status(400).json({}) }
+    // if (phone?.length != 10) { return res.status(401).json({}) }
+    // if (validateEmail(email) === false) { return res.status(403).json({}) }
+    if (mode === "Contact Us") {
+        if (!email || !name || !message || !validateEmail(email)) {
+            res.status(400).json({ message: 'fields cannot be empty' })
         }
-    });
-    if (!name || !message || !email || !phone) { return res.status(400).json({}) }
-    if (phone.length != 10) { return res.status(401).json({}) }
-    if (!email.endsWith(".com") || !email.split('@').length == 2) { return res.status(402).json({}) }
-    console.log("verified");
-    let mailOptions = {
-        from: email,
-        to: 'dhaval_p_shah@yahoo.com',
-        subject: 'Contact Us',
-        text: message + "\ncontact me: " + phone
-    };
-    console.log(mailOptions);
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            res.status(400).json({});
-        } else {
-            console.log('Email sent: ' + info.response);
-            res.status(200).json({});
+        const subject = `Contact Us Request from ${name}`;
+        const mailMessage = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`;
+        sendEmail(res, subject, mailMessage);
+    } else if (mode === "Report Asked") {
+        if (!email || !tickerSymbols) {
+            res.status(400).json({ message: 'fields cannot be empty' })
         }
-    });
+        const subject = "Report Demanded";
+        const mailMessage = `Email: ${email}\nTicker Symbols: ${tickerSymbols}`;
+        sendEmail(res, subject, mailMessage);
+    }
 
 });
 
